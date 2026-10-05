@@ -37,7 +37,8 @@ jobs:
         shell: pwsh
         run: |
           $h = (Get-FileHash out/wintop.exe -Algorithm SHA256).Hash.ToLower()
-          "$h  wintop.exe" | Out-File -Encoding ascii out/wintop.exe.sha256
+          # LF line ending so `sha256sum -c` works on Linux/macOS and Git Bash
+          [IO.File]::WriteAllText("$PWD/out/wintop.exe.sha256", "$h  wintop.exe`n")
 
       - name: Release notes
         shell: pwsh
