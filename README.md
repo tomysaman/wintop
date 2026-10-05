@@ -2,6 +2,8 @@
 
 A btop/htop-style system monitor for Windows in one portable `wintop.exe`. It needs no installer and no .NET runtime.
 
+![wintop with the default theme](docs/screenshot.png)
+
 ## Why
 
 There are already btop/htop-style monitors for Windows, but none of them covered everything I check:
