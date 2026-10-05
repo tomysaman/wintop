@@ -9,6 +9,24 @@ There are already btop/htop-style monitors for Windows, but none of them covered
 - **Fan speeds and open ports.** wintop shows every fan the hardware reports, and every listening port with the process that owns it.
 - **What a process is, and why it's doing that.** When a process uses a lot of CPU or listens on a port, I want to know what it is and whether that's normal. Select it and press `w`: a Google search opens asking what the process is and why it uses CPU or listens on that port.
 
+## Features
+
+- **One portable exe.** No installer and no .NET runtime. `config.json` and the `theme\` folder are created next to it on first run.
+- **CPU:** total and per-thread load with a history graph, average and per-core temperature, per-core clocks, package power.
+- **Memory:** used, available, cached, pagefile, commit charge.
+- **GPU:** load, VRAM, temperatures, clock, power and fan for each GPU, plus the processes using it most.
+- **Disks:** used space, read/write speed and active time per volume.
+- **Network:** download/upload graphs and totals, IP address, Wi-Fi network, signal strength and link speed.
+- **Ports:** every listening TCP port and bound UDP port, the process that owns it, and whether it's reachable from the network or local only.
+- **Power:** CPU + GPU watts, energy used since start, average and peak.
+- **Sensors:** every fan speed and temperature sensor the hardware exposes (CPU, GPU, motherboard, drives).
+- **Processes:** CPU %, GPU %, memory, threads and handles; sort, kill. Generic hosts such as `node.exe` or `svchost.exe` show the app or service they belong to.
+- **Full-screen lists:** `o` shows all ports and `l` shows all processes, scrollable, with kill and web search.
+- **Web search:** `w` opens a Google search about the selected process: what it is, why it uses CPU/GPU, why it listens on a port.
+- **Themes:** btop-compatible `.theme` files; default (btop-like), htop and nord included.
+- **Admin mode:** press `a` to restart elevated for CPU temperature, power and fan readings. It reopens in Windows Terminal if you started it there.
+- **Window snapping:** resizes with the window, so Win+Left/Right and PowerToys FancyZones work.
+
 ## Download
 
 Get `wintop.exe` from the [latest release](../../releases/latest). Every version is listed on the [Releases page](../../releases), with its changes in [CHANGELOG.md](CHANGELOG.md).
