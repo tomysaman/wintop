@@ -1,0 +1,54 @@
+# Builds wintop.exe and publishes a GitHub Release when a version tag (v1.2.3) is pushed.
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Version from tag
+        shell: pwsh
+        run: |
+          $v = '${{ github.ref_name }}'.TrimStart('v')
+          "VERSION=$v" >> $env:GITHUB_ENV
+
+      - name: Publish
+        run: dotnet publish src/WinTop.csproj -c Release -o out -p:Version=${{ env.VERSION }}
+
+      - name: Check version
+        shell: pwsh
+        run: |
+          $got = (& out/wintop.exe --version).Trim()
+          if ($got -ne "wintop $env:VERSION") { throw "exe reports '$got', expected 'wintop $env:VERSION'" }
+
+      - name: Checksum
+        shell: pwsh
+        run: |
+          $h = (Get-FileHash out/wintop.exe -Algorithm SHA256).Hash.ToLower()
+          "$h  wintop.exe" | Out-File -Encoding ascii out/wintop.exe.sha256
+
+      - name: Release notes
+        shell: pwsh
+        run: ./.github/release-notes.ps1 -Version $env:VERSION -Out notes.md
+
+      - name: Create release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = '${{ github.ref_name }}'
+          $opts = @('--title', "wintop $tag", '--notes-file', 'notes.md')
+          if ($tag.Contains('-')) { $opts += '--prerelease' }   # v1.2.0-beta.1
+          gh release create $tag out/wintop.exe out/wintop.exe.sha256 @opts

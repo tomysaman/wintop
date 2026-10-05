@@ -2,9 +2,15 @@
 
 A btop/htop-style system monitor for Windows in one portable `wintop.exe`. It needs no installer and no .NET runtime.
 
+## Download
+
+Get `wintop.exe` from the [latest release](../../releases/latest). Every version is listed on the [Releases page](../../releases), with its changes in [CHANGELOG.md](CHANGELOG.md).
+
+Windows SmartScreen may warn on first launch because the exe isn't code-signed. Choose **More info → Run anyway**.
+
 ## Run
 
-Copy `dist\wintop.exe` anywhere and run it. On first start it creates these files next to the exe:
+Copy `wintop.exe` anywhere and run it. On first start it creates these files next to the exe:
 
 ```
 wintop.exe
@@ -122,4 +128,15 @@ Requires the .NET 8 SDK.
 dotnet publish src/WinTop.csproj -c Release -o dist
 ```
 
-This produces a self-contained, compressed single-file `dist\wintop.exe` (~37 MB). It is built on [LibreHardwareMonitorLib](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) (MPL-2.0).
+This produces a self-contained, compressed single-file `dist\wintop.exe` (~37 MB). `build\` and `dist\` are not committed. It is built on [LibreHardwareMonitorLib](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) (MPL-2.0).
+
+## Releasing
+
+1. Add a `## [x.y.z] - date` section to `CHANGELOG.md` and commit it.
+2. Tag and push:
+   ```
+   git tag v1.1.0
+   git push origin main v1.1.0
+   ```
+
+The `release` workflow (`.github/workflows/release.yml`) builds `wintop.exe` with that version, checks that `wintop --version` matches, and creates the GitHub Release with `wintop.exe`, `wintop.exe.sha256` and the changelog section as notes. A tag with a suffix (`v1.1.0-beta.1`) becomes a pre-release.

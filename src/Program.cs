@@ -7,11 +7,22 @@ public static class Program
 {
     public static string BaseDir => AppContext.BaseDirectory;
 
+    /// <summary>The release version (set from the git tag at build time), without the "+commit" suffix.</summary>
+    public static string Version =>
+        (typeof(Program).Assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyInformationalVersionAttribute), false)
+            .FirstOrDefault() as System.Reflection.AssemblyInformationalVersionAttribute)?.InformationalVersion.Split('+')[0] ?? "?";
+
     public static int Main(string[] args)
     {
         string configPath = Path.Combine(BaseDir, "config.json");
         for (int i = 0; i < args.Length; i++)
             if ((args[i] is "-c" or "--config") && i + 1 < args.Length) configPath = Path.GetFullPath(args[++i]);
+
+        if (args.Contains("-v") || args.Contains("--version"))
+        {
+            Console.WriteLine("wintop " + Version);
+            return 0;
+        }
 
         if (args.Contains("-h") || args.Contains("--help") || args.Contains("/?"))
         {
@@ -22,6 +33,7 @@ public static class Program
                   -c, --config <file>   use a different config file (default: config.json next to the exe)
                   --dump                print all detected metrics and sensors once, then exit
                   --themes              list available themes
+                  -v, --version         print the version
                   -h, --help            this help
 
                 Keys: q/Esc quit, s sort, r reverse sort, t next theme, n next network adapter,
