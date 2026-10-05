@@ -31,6 +31,7 @@ public sealed class App : IDisposable
     int _procScroll;
     bool _showHelp;
     int? _confirmKillPid;
+    long _confirmKillCreate; // creation time of the process the dialog asked about (0 = unknown)
     enum Overlay { None, Ports, Procs }
     Overlay _overlay;
     int _ovSel, _ovScroll, _ovPage = 10;
@@ -181,13 +182,8 @@ public sealed class App : IDisposable
             _confirmKillPid = null;
             if (k.KeyChar is 'y' or 'Y')
             {
-                try
-                {
-                    using var p = Process.GetProcessById(kp);
-                    p.Kill();
-                    Flash($"killed {kp} {_confirmKillName}");
-                }
-                catch (Exception ex) { Flash($"kill {kp} failed: {ex.Message}"); }
+                string? err = Native.KillProcess(kp, _confirmKillCreate);
+                Flash(err == null ? $"killed {kp} {_confirmKillName}" : $"kill {kp} failed: {err}");
             }
             return;
         }
@@ -275,6 +271,7 @@ public sealed class App : IDisposable
                 if (sel != null)
                 {
                     _confirmKillPid = sel.Pid;
+                    _confirmKillCreate = sel.CreateTime;
                     _confirmKillName = WithApp(sel.Name, sel.App);
                 }
                 break;
@@ -1241,6 +1238,7 @@ public sealed class App : IDisposable
                 if (OverlaySelection() is { } sel && sel.pid > 0)
                 {
                     _confirmKillPid = sel.pid;
+                    _confirmKillCreate = _snap?.Procs.FirstOrDefault(p => p.Pid == sel.pid)?.CreateTime ?? 0;
                     _confirmKillName = sel.name;
                 }
                 return true;
@@ -1264,7 +1262,9 @@ public sealed class App : IDisposable
         {
             // explorer.exe hands the URL to the already-running shell, so the browser starts
             // unelevated even when wintop runs as administrator.
-            Process.Start(new ProcessStartInfo("explorer.exe", "\"" + url + "\"") { UseShellExecute = false });
+            // Full path: a bare "explorer.exe" is searched in the current directory before C:\Windows.
+            string explorer = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe");
+            Process.Start(new ProcessStartInfo(explorer, "\"" + url + "\"") { UseShellExecute = false });
             Flash($"searching the web for {name}", 2);
         }
         catch (Exception ex) { Flash("could not open browser: " + ex.Message, 4); }

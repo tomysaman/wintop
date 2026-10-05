@@ -20,8 +20,11 @@ jobs:
 
       - name: Version from tag
         shell: pwsh
+        env:
+          TAG: ${{ github.ref_name }}
         run: |
-          $v = '${{ github.ref_name }}'.TrimStart('v')
+          if ($env:TAG -notmatch '^v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$') { throw "tag '$env:TAG' is not a version like v1.2.3" }
+          $v = $env:TAG.TrimStart('v')
           "VERSION=$v" >> $env:GITHUB_ENV
 
       - name: Publish
@@ -48,8 +51,9 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
         run: |
-          $tag = '${{ github.ref_name }}'
+          $tag = $env:TAG
           $opts = @('--title', "wintop $tag", '--notes-file', 'notes.md')
           if ($tag.Contains('-')) { $opts += '--prerelease' }   # v1.2.0-beta.1
           gh release create $tag out/wintop.exe out/wintop.exe.sha256 @opts

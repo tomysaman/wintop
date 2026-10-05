@@ -83,8 +83,10 @@ public static class Program
             string argStr = string.Join(" ", args.Append("--no-elevate").Select(a => a.Contains(' ') ? $"\"{a}\"" : a));
             // Elevated console apps open in the legacy console host. When we were started from
             // Windows Terminal, open an elevated Terminal window instead so the experience matches.
-            bool inTerminal = Environment.GetEnvironmentVariable("WT_SESSION") != null;
-            var psi = new ProcessStartInfo(inTerminal ? "wt.exe" : exe)
+            // Full path to the Terminal alias: a bare "wt.exe" could be picked up from the current directory.
+            string wt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\WindowsApps\wt.exe");
+            bool inTerminal = Environment.GetEnvironmentVariable("WT_SESSION") != null && File.Exists(wt);
+            var psi = new ProcessStartInfo(inTerminal ? wt : exe)
             {
                 UseShellExecute = true,
                 Verb = "runas",

@@ -2,6 +2,15 @@
 
 Each version's section becomes the notes of its GitHub Release. Add a section before tagging a release.
 
+## [1.0.1] - 2026-10-05
+
+Security fixes.
+
+- The web search (`w`) starts `explorer.exe` by its full path. Before, an `explorer.exe` placed in the folder wintop was started from could run instead, with admin rights when wintop was elevated.
+- Restarting as administrator from Windows Terminal starts `wt.exe` by its full path, for the same reason.
+- Killing a process checks that it is still the process you confirmed. Before, if it exited while the dialog was open and Windows reused its PID, a different process could be killed.
+- The release workflow no longer pastes the tag name into its scripts, and rejects tags that aren't a version number.
+
 ## [1.0.0] - 2026-10-05
 
 First release.

@@ -143,6 +143,39 @@ internal static unsafe class Native
     [DllImport("wlanapi.dll")]
     public static extern void WlanFreeMemory(IntPtr memory);
 
+    // ---------------- Kill ----------------
+    const uint PROCESS_TERMINATE = 0x0001, PROCESS_QUERY_LIMITED_INFORMATION = 0x1000;
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern IntPtr OpenProcess(uint access, bool inherit, int pid);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool GetProcessTimes(IntPtr h, out long creation, out long exit, out long kernel, out long user);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool TerminateProcess(IntPtr h, uint exitCode);
+
+    [DllImport("kernel32.dll")]
+    static extern bool CloseHandle(IntPtr h);
+
+    /// <summary>
+    /// Kills a process, but only if it is still the one that was confirmed: the open handle keeps the
+    /// PID from being reused, and its creation time must match. Returns null on success, else the error.
+    /// </summary>
+    public static string? KillProcess(int pid, long expectedCreate)
+    {
+        IntPtr h = OpenProcess(PROCESS_TERMINATE | PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
+        if (h == IntPtr.Zero) return new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error()).Message;
+        try
+        {
+            if (expectedCreate != 0 && GetProcessTimes(h, out long created, out _, out _, out _) && created != expectedCreate)
+                return "the process already exited (its PID now belongs to another process)";
+            if (!TerminateProcess(h, 1)) return new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error()).Message;
+            return null;
+        }
+        finally { CloseHandle(h); }
+    }
+
     // ---------------- Elevation ----------------
     public static bool IsElevated()
     {
