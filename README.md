@@ -140,3 +140,7 @@ This produces a self-contained, compressed single-file `dist\wintop.exe` (~37 MB
    ```
 
 The `release` workflow (`.github/workflows/release.yml`) builds `wintop.exe` with that version, checks that `wintop --version` matches, and creates the GitHub Release with `wintop.exe`, `wintop.exe.sha256` and the changelog section as notes. A tag with a suffix (`v1.1.0-beta.1`) becomes a pre-release.
+
+## License
+
+MIT, see [LICENSE](LICENSE). The exe bundles [LibreHardwareMonitorLib](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor), which is MPL-2.0.
