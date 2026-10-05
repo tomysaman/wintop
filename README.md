@@ -2,6 +2,13 @@
 
 A btop/htop-style system monitor for Windows in one portable `wintop.exe`. It needs no installer and no .NET runtime.
 
+## Why
+
+There are already btop/htop-style monitors for Windows, but none of them covered everything I check:
+
+- **Fan speeds and open ports.** wintop shows every fan the hardware reports, and every listening port with the process that owns it.
+- **What a process is, and why it's doing that.** When a process uses a lot of CPU or listens on a port, I want to know what it is and whether that's normal. Select it and press `w`: a Google search opens asking what the process is and why it uses CPU or listens on that port.
+
 ## Download
 
 Get `wintop.exe` from the [latest release](../../releases/latest). Every version is listed on the [Releases page](../../releases), with its changes in [CHANGELOG.md](CHANGELOG.md).
@@ -129,17 +136,6 @@ dotnet publish src/WinTop.csproj -c Release -o dist
 ```
 
 This produces a self-contained, compressed single-file `dist\wintop.exe` (~37 MB). `build\` and `dist\` are not committed. It is built on [LibreHardwareMonitorLib](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) (MPL-2.0).
-
-## Releasing
-
-1. Add a `## [x.y.z] - date` section to `CHANGELOG.md` and commit it.
-2. Tag and push:
-   ```
-   git tag v1.1.0
-   git push origin main v1.1.0
-   ```
-
-The `release` workflow (`.github/workflows/release.yml`) builds `wintop.exe` with that version, checks that `wintop --version` matches, and creates the GitHub Release with `wintop.exe`, `wintop.exe.sha256` and the changelog section as notes. A tag with a suffix (`v1.1.0-beta.1`) becomes a pre-release.
 
 ## License
 
