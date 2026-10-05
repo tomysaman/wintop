@@ -1,0 +1,93 @@
+# wintop default theme - modeled on btop's Default theme.
+# Format is btop-compatible: theme[key]="#rrggbb" | "#gg" (gray) | "r g b" | "" (unset / terminal default).
+# btop .theme files can be dropped into this folder and used as-is.
+
+# Main background, empty for terminal default
+theme[main_bg]="#00"
+# Main text color
+theme[main_fg]="#cc"
+# Title color for boxes
+theme[title]="#ee"
+# Highlight color for keyboard shortcuts
+theme[hi_fg]="#b54040"
+# Background/foreground of selected item in process box
+theme[selected_bg]="#6a2f2f"
+theme[selected_fg]="#ee"
+# Inactive / disabled text
+theme[inactive_fg]="#40"
+# Text drawn on graphs / secondary labels
+theme[graph_text]="#60"
+# Background of meters (empty part)
+theme[meter_bg]="#40"
+# Misc colors for processes box
+theme[proc_misc]="#0de756"
+
+# Box outline colors
+theme[cpu_box]="#3d7b46"
+theme[mem_box]="#8a882e"
+theme[net_box]="#423ba5"
+theme[proc_box]="#923535"
+theme[gpu_box]="#3a7d8c"
+theme[disk_box]="#8a6a2e"
+theme[sensors_box]="#7a3d8c"
+theme[power_box]="#b8572e"
+theme[ports_box]="#2f8a73"
+# Box divider lines
+theme[div_line]="#30"
+
+# Temperatures: start (cool) / mid / end (hot)
+theme[temp_start]="#4897d4"
+theme[temp_mid]="#5474e8"
+theme[temp_end]="#ff40b6"
+
+# CPU graph / meters
+theme[cpu_start]="#50f095"
+theme[cpu_mid]="#f2e266"
+theme[cpu_end]="#fa1e1e"
+
+# GPU graph / meters
+theme[gpu_start]="#26c5ff"
+theme[gpu_mid]="#f2e266"
+theme[gpu_end]="#fa1e1e"
+
+# Memory
+theme[free_start]="#223014"
+theme[free_mid]="#b5e685"
+theme[free_end]="#dcff85"
+theme[cached_start]="#0b1a29"
+theme[cached_mid]="#74e6fc"
+theme[cached_end]="#26c5ff"
+theme[available_start]="#292107"
+theme[available_mid]="#ffd77a"
+theme[available_end]="#ffb814"
+theme[used_start]="#3b1f1c"
+theme[used_mid]="#d9626d"
+theme[used_end]="#ff4769"
+
+# Disk usage / activity
+theme[disk_start]="#4f9e46"
+theme[disk_mid]="#d8c045"
+theme[disk_end]="#e04a4a"
+
+# Fans (by % of fastest fan)
+theme[fan_start]="#3f7fbf"
+theme[fan_mid]="#8f6fe0"
+theme[fan_end]="#ff60c0"
+
+# Network
+theme[download_start]="#231a63"
+theme[download_mid]="#4f43a3"
+theme[download_end]="#b0a9de"
+theme[upload_start]="#510554"
+theme[upload_mid]="#7d4180"
+theme[upload_end]="#dcafde"
+
+# Wi-Fi signal (weak -> strong)
+theme[signal_start]="#e04a4a"
+theme[signal_mid]="#d8c045"
+theme[signal_end]="#50f095"
+
+# Process CPU usage gradient
+theme[process_start]="#80d0a3"
+theme[process_mid]="#dcd179"
+theme[process_end]="#d45454"
